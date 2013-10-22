@@ -1,0 +1,17 @@
+@(product: Product)
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+
+<body>
+<table>
+<input id="productKey" type="hidden" value=@product.key name="Key"/>
+<tr><td width="70">ID</td><td><input id="productId" type="text" value=@product.id name="Id" readonly /></td></tr>
+<tr><td>Title</td><td><input id="productTitle" type="text" value=@product.title name="Title" /></td></tr>
+<tr><td>Price</td><td><input id="productPrice" type="text" value=@product.pricing.price name="Pricing.Price" /></td></tr>
+<tr><td>Cost</td><td><input id="productCost" type="text" value=@product.pricing.cost name="Pricing.Cost" readonly /></td></tr>
+<tr><td><input id="deleteProduct" type="button" value="Delete" onClick="getDate()"></td></tr>
+</table>
+</body>
+</html>

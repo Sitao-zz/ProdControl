@@ -1,0 +1,49 @@
+@(products: List[Product], productForm: Form[Product], searchForm: Form[Search])
+
+@import helper._
+
+@main("Product Control") {
+	<head>
+		<script type='text/javascript' src='assets/javascripts/common.js'></script>
+		<script type='text/javascript' src='assets/javascripts/color.js'></script>
+		<script type='text/javascript' src='assets/javascripts/product.js'></script>
+		<script type='text/javascript' src='assets/javascripts/products.js'></script>
+		<script type='text/javascript' src='assets/javascripts/jstest.js'></script>
+	</head>
+	
+	<body onload="load()">
+	<h2>Add a new product</h2>
+	
+	@form(routes.Application.newProduct()){
+		@if(productForm.hasGlobalErrors) { 
+			<p class="error">
+				@productForm.globalError.message
+			</p>
+		}
+	
+		<div id="createNewDiv">
+		<table>
+		<tr><td width="70">Id</td><td><input id="newProductId" type="text" value="" name="Id" onFocus="showCreateNew()" /></td></tr>
+		</table>
+		</div>
+	}
+	
+	<div id="searchResultCountDiv"><h2>Search products: </h2></div>
+	<div>
+	<table>
+	<tr>
+	<td width="70">Product ID</td>
+	<td><input type="text" id="productSearchText" value="" onKeyUp="searchforProduct()" onFocus="startSearch()" onBlur="clearSearchResult()"/></td>
+	<td><div id="searchFeedBack"></div></td>
+	</tr>
+	</table>
+	</div>
+	
+	<table id="searchSuggestionTable" cellspace="0" cellpadding="0" dir="ltr" frame="box" bgcolor="#FFFFFF" style="width:150px; top: 339px; position: absolute; text-align: left; left: 90px; display: none;">
+	<tr><td>new</td></tr>
+	</table>
+	
+	<br/>
+	<div id="searchResultDiv"></div>
+	</body>
+}

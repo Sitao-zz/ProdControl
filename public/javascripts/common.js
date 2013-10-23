@@ -26,7 +26,7 @@ function isAlphaNumeric(str){
 }
 
 function isValidTitle(str){
-	var pat=/^[a-zA-Z][a-zA-Z0-9]*$/i;
+	var pat=/^[a-zA-Z][a-zA-Z0-9-'. &]*$/i;
 	return (pat.test(str));
 }
 

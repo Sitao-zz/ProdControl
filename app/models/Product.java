@@ -160,8 +160,8 @@ public class Product extends ObjectResultBase implements IProduct {
 				Product product = cursor.next();
 				System.out.println("update product:id=" + product.id
 						+ " title_orig=" + product.title);
-				if (title.matches("^[a-zA-Z][a-zA-Z0-9]*$")) {
-					product.title = title;
+				if (title.matches("^[a-zA-Z][a-zA-Z0-9-'. &]*$")) {
+					product.title = title.trim();
 					mongo.coll.save(product);
 				} else {
 					return new ObjectResult(ObjectResultBase.CODE.WARN,
@@ -249,6 +249,10 @@ public class Product extends ObjectResultBase implements IProduct {
 
 	public String getTitle() {
 		return this.title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
 	public Pricing getPricing() {

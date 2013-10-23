@@ -13,6 +13,7 @@ import org.codehaus.jackson.map.ObjectWriter;
 
 public class Util {
 	public static void format(IProduct prod) {
+		prod.setTitle(prod.getTitle().trim());
 		Pricing pricing = prod.getPricing();
 		pricing.cost = roundUpMoney(pricing.cost);
 		pricing.price = roundUpMoney(pricing.price);

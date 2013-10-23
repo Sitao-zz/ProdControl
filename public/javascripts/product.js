@@ -212,10 +212,10 @@ function retrieveProductList(products){
 
 function retrieveProduct(product){
 	var html='<table id="productTable_'+product.id+'" frame="above" cellspacing=​"0" cellpadding=​"0" onmouseover="highlightProduct('+product.id+')" onmouseout="downplayProduct('+product.id+')">';
-	html+='<input id="productKey_'+product.id+'" type="hidden" value='+product.key+' name="Key"/>';
+	html+='<input id="productKey_'+product.id+'" type="hidden" value="'+product.key+'" name="Key"/>';
 	html+='<tr id="productRow_'+product.id+'" onClick="toggleProductDetail('+product.id+')">';
-	html+='<td width="30">ID:</td><td width="40"><label id="productId_'+product.id+'">'+product.id+'</label></td>';
-	html+='<td width="30">Title:</td><td width="100"><label id="productTitle_'+product.id+'">'+product.title+'</label></td>';
+	html+='<td width="20">ID:</td><td width="70" align="left"><label id="productId_'+product.id+'">'+product.id+'</label></td>';
+	html+='<td width="30">Title:</td><td width="200" align="left"><label id="productTitle_'+product.id+'">'+product.title+'</label></td>';
 	html+='<td width="70"><label id="deleteProduct_'+product.id+'" onClick="deleteProduct('+product.id+'); event.cancelBubble=true;">Delete</label></td>';
 	html+='</tr>';
 	html+='<tr><td colspan="5"><div id="productDetails_'+product.id+'"></div></td></tr>';
@@ -236,11 +236,11 @@ function retrieveProductDetailList(products){
 
 function retrieveProductDetail(product){
 	var html='<table id="productDetailTable_'+product.id+'" cellspacing=​"0" cellpadding=​"0" onmouseover="highlightProduct('+product.id+')" onmouseout="downplayProduct('+product.id+')">';
-	html+='<input id="productDetailKey_'+product.id+'" type="hidden" value='+product.key+' name="Key"/>';
-	html+='<tr><td width="70">ID</td><td><input id="productDetailId_'+product.id+'" type="text" value='+product.id+' name="Id" readonly /></td></tr>';
-	html+='<tr><td>Title</td><td><input id="productDetailTitle_'+product.id+'" type="text" value='+product.title+' name="Title" onKeyUp="updateProductTitle('+product.id+')" onChange="clearFeedBack(\'updateTitleFeedBack_'+product.id+'\')" /></td><td><div id="updateTitleFeedBack_'+product.id+'"/ ></td></tr>';
-	html+='<tr><td>Price</td><td><input id="productDetailPrice_'+product.id+'" type="text" value='+product.pricing.price+' name="Pricing.Price" onKeyUp="updateProductPrice('+product.id+')" onChange="clearFeedBack(\'updatePriceFeedBack_'+product.id+'\')" /></td><td><div id="updatePriceFeedBack_'+product.id+'"/ ></td></tr>';
-	html+='<tr><td>Cost</td><td><input id="productDetailCost_'+product.id+'" type="text" value='+product.pricing.cost+' name="Pricing.Cost" readonly /></td></tr>';
+	html+='<input id="productDetailKey_'+product.id+'" type="hidden" value="'+product.key+'" name="Key"/>';
+	html+='<tr><td width="90">ID</td><td><input id="productDetailId_'+product.id+'" type="text" value="'+product.id+'" name="Id" readonly /></td></tr>';
+	html+='<tr><td>Title</td><td><input id="productDetailTitle_'+product.id+'" type="text" value="'+product.title+'" name="Title" onKeyUp="updateProductTitle('+product.id+')" onChange="clearFeedBack(\'updateTitleFeedBack_'+product.id+'\')" /></td><td><div id="updateTitleFeedBack_'+product.id+'"/ ></td></tr>';
+	html+='<tr><td>Price</td><td><input id="productDetailPrice_'+product.id+'" type="text" value="'+product.pricing.price+'" name="Pricing.Price" onKeyUp="updateProductPrice('+product.id+')" onChange="clearFeedBack(\'updatePriceFeedBack_'+product.id+'\')" /></td><td><div id="updatePriceFeedBack_'+product.id+'"/ ></td></tr>';
+	html+='<tr><td>Cost</td><td><input id="productDetailCost_'+product.id+'" type="text" value="'+product.pricing.cost+'" name="Pricing.Cost" readonly /></td></tr>';
 	html+='</table>';
 	return html;
 }

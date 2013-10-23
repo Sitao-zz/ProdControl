@@ -5,5 +5,7 @@ public interface IProduct {
 
 	String getTitle();
 
+	void setTitle(String title);
+
 	Pricing getPricing();
 }

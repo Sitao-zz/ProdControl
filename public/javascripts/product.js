@@ -238,7 +238,7 @@ function retrieveProduct(product){
 	html+='<tr id="productRow_'+product.id+'" onClick="toggleProductDetail('+product.id+')">';
 	html+='<td width="30">ID:</td><td width="40"><label id="productId_'+product.id+'">'+product.id+'</label></td>';
 	html+='<td width="30">Title:</td><td width="100"><label id="productTitle_'+product.id+'">'+product.title+'</label></td>';
-	html+='<td width="70"><label id="deleteProduct_'+product.id+'" onClick="deleteProduct('+product.id+')">Delete</label></td>';
+	html+='<td width="70"><label id="deleteProduct_'+product.id+'" onClick="deleteProduct('+product.id+'); event.cancelBubble=true;">Delete</label></td>';
 	html+='</tr>';
 	html+='<tr><td colspan="5"><div id="productDetails_'+product.id+'"></div></td></tr>';
 	html+='</table>';

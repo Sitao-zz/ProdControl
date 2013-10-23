@@ -328,7 +328,7 @@ function hideProductDetail(id){
 
 function showProductDetail(id){
 	initXmlHttp(showProductDetailCallBack);
-	var request="/products/search/"+id;
+	var request="/products/find/"+id;
 	xmlhttp.open("POST",request,true);
 	xmlhttp.send();
 }

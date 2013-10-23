@@ -1,5 +1,6 @@
 package models;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Id;
@@ -23,20 +24,39 @@ public class Product extends ObjectResultBase implements IProduct {
 	public String title = "";
 	public Pricing pricing = new Pricing();
 	private static String emptyJson = "{\"key\" : \"\", \"id\" : 0, \"title\" : \"\", \"pricing\" : {\"cost\" : 0.0, \"price\" : 0.0, \"promo_price\" : 0.0, \"savings\" : 0.0, \"on_sale\" : 0}}";
-	private static MongoDBController<Product, String> mongo = new MongoDBController<Product, String>(
-			Product.class, String.class);
 
 	public Product() {
 	}
 
+	public static MongoDBController<Product, String> newMongo() {
+		return new MongoDBController<Product, String>(Product.class,
+				String.class);
+	}
+
 	public static List<Product> all() {
 		BasicDBObject orderBy = new BasicDBObject("id", 1);
-		return mongo.coll.find().sort(orderBy).toArray();
+		List<Product> list = new ArrayList<Product>();
+		MongoDBController<Product, String> mongo = newMongo();
+		try {
+			mongo.open();
+			list = mongo.coll.find().sort(orderBy).toArray();
+		} finally {
+			mongo.close();
+		}
+		return list;
 	}
 
 	public static List<Product> all(int count) {
 		BasicDBObject orderBy = new BasicDBObject("id", 1);
-		return mongo.coll.find().sort(orderBy).toArray(count);
+		List<Product> list = new ArrayList<Product>();
+		MongoDBController<Product, String> mongo = newMongo();
+		try {
+			mongo.open();
+			list = mongo.coll.find().sort(orderBy).toArray(count);
+		} finally {
+			mongo.close();
+		}
+		return list;
 	}
 
 	public static List<Product> find(int id) {
@@ -47,7 +67,15 @@ public class Product extends ObjectResultBase implements IProduct {
 				"function(){return (this.id).toString().indexOf(\"" + id
 						+ "\") == 0;}");
 		BasicDBObject orderBy = new BasicDBObject("id", 1);
-		return mongo.coll.find(query).sort(orderBy).toArray();
+		List<Product> list = new ArrayList<Product>();
+		MongoDBController<Product, String> mongo = newMongo();
+		try {
+			mongo.open();
+			list = mongo.coll.find(query).sort(orderBy).toArray();
+		} finally {
+			mongo.close();
+		}
+		return list;
 	}
 
 	public static List<Product> find(int id, int count) {
@@ -55,39 +83,93 @@ public class Product extends ObjectResultBase implements IProduct {
 				"function(){return (this.id).toString().indexOf(\"" + id
 						+ "\") == 0;}");
 		BasicDBObject orderBy = new BasicDBObject("id", 1);
-		return mongo.coll.find(query).sort(orderBy).toArray(count);
+		List<Product> list = new ArrayList<Product>();
+		MongoDBController<Product, String> mongo = newMongo();
+		try {
+			mongo.open();
+			list = mongo.coll.find(query).sort(orderBy).toArray(count);
+		} finally {
+			mongo.close();
+		}
+		return list;
+	}
+
+	public static List<Product> findId(int id) {
+		BasicDBObject query = new BasicDBObject("id", id);
+		BasicDBObject orderBy = new BasicDBObject("title", 1);
+		List<Product> list = new ArrayList<Product>();
+		MongoDBController<Product, String> mongo = newMongo();
+		try {
+			mongo.open();
+			list = mongo.coll.find(query).sort(orderBy).toArray();
+		} finally {
+			mongo.close();
+		}
+		return list;
+	}
+
+	public static List<Product> findId(int id, int count) {
+		BasicDBObject query = new BasicDBObject("id", id);
+		BasicDBObject orderBy = new BasicDBObject("title", 1);
+		List<Product> list = new ArrayList<Product>();
+		MongoDBController<Product, String> mongo = newMongo();
+		try {
+			mongo.open();
+			list = mongo.coll.find(query).sort(orderBy).toArray(count);
+		} finally {
+			mongo.close();
+		}
+		return list;
 	}
 
 	public static void create(Product product) {
 		Util.format(product);
-		mongo.coll.save(product);
+		MongoDBController<Product, String> mongo = newMongo();
+		try {
+			mongo.open();
+			mongo.coll.save(product);
+		} finally {
+			mongo.close();
+		}
 	}
 
 	public static void update(Product product) {
 		System.out.println("update::" + product.key);
-		Product item = mongo.coll.findOneById(product.key);
-		if (product != null) {
-			item.title = product.title;
-			item.pricing.price = product.pricing.price;
-			mongo.coll.save(item);
+		MongoDBController<Product, String> mongo = newMongo();
+		try {
+			mongo.open();
+			Product item = mongo.coll.findOneById(product.key);
+			if (product != null) {
+				item.title = product.title;
+				item.pricing.price = product.pricing.price;
+				mongo.coll.save(item);
+			}
+		} finally {
+			mongo.close();
 		}
 	}
 
 	public static ObjectResultBase updateTitle(int id, String title) {
 		System.out.println("updateTitle::id=" + id + " title=" + title);
 		BasicDBObject query = new BasicDBObject("id", id);
-		DBCursor<Product> cursor = mongo.coll.find(query);
-		while (cursor.hasNext()) {
-			Product product = cursor.next();
-			System.out.println("update product:id=" + product.id
-					+ " title_orig=" + product.title);
-			if (title.matches("^[a-zA-Z][a-zA-Z0-9]*$")) {
-				product.title = title;
-				mongo.coll.save(product);
-			} else {
-				return new ObjectResult(ObjectResultBase.CODE.WARN,
-						"Title invalid", product.title);
+		MongoDBController<Product, String> mongo = newMongo();
+		try {
+			mongo.open();
+			DBCursor<Product> cursor = mongo.coll.find(query);
+			while (cursor.hasNext()) {
+				Product product = cursor.next();
+				System.out.println("update product:id=" + product.id
+						+ " title_orig=" + product.title);
+				if (title.matches("^[a-zA-Z][a-zA-Z0-9]*$")) {
+					product.title = title;
+					mongo.coll.save(product);
+				} else {
+					return new ObjectResult(ObjectResultBase.CODE.WARN,
+							"Title invalid", product.title);
+				}
 			}
+		} finally {
+			mongo.close();
 		}
 		return ObjectResult.OK;
 	}
@@ -96,39 +178,58 @@ public class Product extends ObjectResultBase implements IProduct {
 		System.out.println("updateTitle::id=" + id + " price=" + price);
 		price = Util.roundUpMoney(price);
 		BasicDBObject query = new BasicDBObject("id", id);
-		DBCursor<Product> cursor = mongo.coll.find(query);
-		while (cursor.hasNext()) {
-			Product product = cursor.next();
-			System.out.println("update product:id=" + product.id + " title="
-					+ product.title + " price_orig=" + product.pricing.price);
-			if (price > product.pricing.cost) {
-				product.pricing.price = price;
-				mongo.coll.save(product);
-			} else {
-				return new ObjectResult(ObjectResultBase.CODE.WARN,
-						"Price invalid", Double.toString(product.pricing.price));
+		MongoDBController<Product, String> mongo = newMongo();
+		try {
+			mongo.open();
+			DBCursor<Product> cursor = mongo.coll.find(query);
+			while (cursor.hasNext()) {
+				Product product = cursor.next();
+				System.out.println("update product:id=" + product.id
+						+ " title=" + product.title + " price_orig="
+						+ product.pricing.price);
+				if (price > product.pricing.cost) {
+					product.pricing.price = price;
+					mongo.coll.save(product);
+				} else {
+					return new ObjectResult(ObjectResultBase.CODE.WARN,
+							"Price invalid", product.pricing.price + "");
+				}
 			}
+		} finally {
+			mongo.close();
 		}
 		return ObjectResult.OK;
 	}
 
 	public static void delete(String key) {
-		Product product = mongo.coll.findOneById(key);
-		if (product != null) {
-			System.out.println("delete product:id=" + product.id + " title="
-					+ product.title);
-			mongo.coll.remove(product);
+		MongoDBController<Product, String> mongo = newMongo();
+		try {
+			mongo.open();
+			Product product = mongo.coll.findOneById(key);
+			if (product != null) {
+				System.out.println("delete product:id=" + product.id
+						+ " title=" + product.title);
+				mongo.coll.remove(product);
+			}
+		} finally {
+			mongo.close();
 		}
 	}
 
 	public static void delete(int id) {
 		BasicDBObject query = new BasicDBObject("id", id);
-		DBCursor<Product> cursor = mongo.coll.find(query);
-		while (cursor.hasNext()) {
-			Product product = cursor.next();
-			System.out.println("delete product:id=" + product.id + " title="
-					+ product.title);
-			delete(product.key);
+		MongoDBController<Product, String> mongo = newMongo();
+		try {
+			mongo.open();
+			DBCursor<Product> cursor = mongo.coll.find(query);
+			while (cursor.hasNext()) {
+				Product product = cursor.next();
+				System.out.println("delete product:id=" + product.id
+						+ " title=" + product.title);
+				delete(product.key);
+			}
+		} finally {
+			mongo.close();
 		}
 	}
 

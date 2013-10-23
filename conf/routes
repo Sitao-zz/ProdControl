@@ -13,6 +13,7 @@ GET     /products/assets/*file               controllers.Assets.at(path="/public
 GET 	/products					controllers.Application.products()
 POST 	/products/search			controllers.Application.findAllProduct()
 POST	/products/search/:id		controllers.Application.findProduct(id: String)
+POST	/products/find/:id			controllers.Application.findProductId(id: String)
 POST	/products/create/:product	controllers.Application.newProduct(product: String)
 PUT		/products/update			controllers.Application.updateProduct()
 POST	/products/update/:id/title/:title						controllers.Application.updateProductTitle(id: String, title: String)

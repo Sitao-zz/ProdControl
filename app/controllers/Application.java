@@ -69,6 +69,20 @@ public class Application extends Controller {
 		}
 	}
 
+	public static Result findProductId(String idStr) {
+		System.out.println("findProduct(String)::start.");
+		int id = Integer.parseInt(idStr);
+		int count = Integer.parseInt(Config.getValue("resultLength"));
+		List<Product> list = Product.findId(id, count);
+		if (list.size() > 0) {
+			String json = Util.SerializeToJson(list, Product.getEmptyJson());
+			System.out.println(json);
+			return ok(json);
+		} else {
+			return ok(idStr);
+		}
+	}
+
 	public static Result newProduct(String jsonData) {
 		System.out.println("newProduct::start");
 		Product product = new Product();

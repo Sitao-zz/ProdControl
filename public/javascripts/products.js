@@ -34,7 +34,7 @@ function updateProductTitle(id){
 				document.getElementById('updateTitleFeedBack_'+id).innerHTML="";
 			}
 		}else{
-			document.getElementById('updateTitleFeedBack_'+id).innerHTML='<font color="red">Title invalid</font>';
+			document.getElementById('updateTitleFeedBack_'+id).innerHTML='<font color="red" size="2">Title invalid</font>';
 		}
 	}
 }
@@ -47,11 +47,11 @@ function updateProductTitleCallBack(){
 			var msg=result.message;
 			var origValue=result.origValue;
 			if(isEmpty(result.message) || isBlank(result.message)){
-				document.getElementById('updateTitleFeedBack_'+id).innerHTML='<font color="green">Modified</font>';
+				document.getElementById('updateTitleFeedBack_'+id).innerHTML='<font color="green" size="2">Modified</font>';
 				document.getElementById('productTitle_'+id).innerHTML=document.getElementById('productDetailTitle_'+id).value;
 				document.getElementById('productDetailPrice_'+id).focus();
 			}else{
-				document.getElementById('updateTitleFeedBack_'+id).innerHTML='<font color="red">'+msg+'</font>';
+				document.getElementById('updateTitleFeedBack_'+id).innerHTML='<font color="red" size="2">'+msg+'</font>';
 				document.getElementById('productDetailTitle_'+id).value=origValue;
 				document.getElementById('productDetailTitle_'+id).focus();
 			}
@@ -67,7 +67,7 @@ function updateProductPrice(id){
 			var price=parseFloat(document.getElementById('productDetailPrice_'+id).value);
 			var cost=parseFloat(document.getElementById('productDetailCost_'+id).value);
 			if(price<=cost){
-				document.getElementById('updatePriceFeedBack_'+id).innerHTML='<font color="red">Price invalid</font>';
+				document.getElementById('updatePriceFeedBack_'+id).innerHTML='<font color="red" size="2">Price invalid</font>';
 			}else{
 				if(e.keyCode==13){
 					initXmlHttp(updateProductPriceCallBack);
@@ -80,7 +80,7 @@ function updateProductPrice(id){
 				}
 			}
 		}else{
-			document.getElementById('updatePriceFeedBack_'+id).innerHTML='<font color="red">Price invalid</font>';
+			document.getElementById('updatePriceFeedBack_'+id).innerHTML='<font color="red" size="2">Price invalid</font>';
 		}
 	}
 }
@@ -93,10 +93,10 @@ function updateProductPriceCallBack(){
 			var msg=result.message;
 			var origValue=result.origValue;
 			if(isEmpty(result.message) || isBlank(result.message)){
-				document.getElementById('updatePriceFeedBack_'+id).innerHTML='<font color="green">Modified</font>';
+				document.getElementById('updatePriceFeedBack_'+id).innerHTML='<font color="green" size="2">Modified</font>';
 				document.getElementById('productDetailPrice_'+id).blur();
 			}else{
-				document.getElementById('updatePriceFeedBack_'+id).innerHTML='<font color="red">'+msg+'</font>';
+				document.getElementById('updatePriceFeedBack_'+id).innerHTML='<font color="red" size="2">'+msg+'</font>';
 				document.getElementById('productDetailPrice_'+id).value=origValue;
 				document.getElementById('productDetailPrice_'+id).focus();
 			}
@@ -106,6 +106,8 @@ function updateProductPriceCallBack(){
 
 function createNewProduct(){
 	var form=document.getElementById('createNewForm');
+	document.getElementById('createNewFeedback').style.visibility='hidden';
+	document.getElementById('createNewFeedback').innerHTML='<p/>';
 	if(validateNewProduct()){
 		var product=retrieveProductObj(form);
 		var data=JSON.stringify(product);
@@ -124,10 +126,11 @@ function createNewProductCallBack(){
 			var msg=result.message;
 			var origValue=result.origValue;
 			if(isEmpty(result.message) || isBlank(result.message)){
-				document.getElementById('newProductIdFeedBack').innerHTML='<font color="green">Product '+id+' is created</font>';
-				document.getElementById("newProductId").focus();
+				document.getElementById('createNewFeedback').style.visibility='visible';
+				document.getElementById('createNewFeedback').innerHTML='<font color="green" size="2">Product '+id+' is created</font>';
+				resetCreateNewForm();
 			}else{
-				document.getElementById('newProductIdFeedBack').innerHTML='<font color="red">'+msg+'</font>';
+				document.getElementById('createNewFeedback').innerHTML='<font color="red" size="2">'+msg+'</font>';
 			}
 		}
 	}
@@ -233,7 +236,7 @@ function findMatchId(){
 		xmlhttp.send();
 	}else{
 		hideSuggestionBox();
-		document.getElementById('searchResultCountDiv').innerHTML='<h2>Search products</h2>';
+		document.getElementById('searchResultCountDiv').innerHTML='Search products';
 	}
 }
 
@@ -242,13 +245,13 @@ function findMatchIdCallBack(){
 		var response=xmlhttp.responseText;
 		if(isEmpty(response) || isBlank(response)){
 			document.getElementById('searchResultDiv').innerHTML="";
-			document.getElementById('searchResultCountDiv').innerHTML='<h2>Search products: 0 product(s)</h2>';
+			document.getElementById('searchResultCountDiv').innerHTML='Search products: 0 product(s)';
 			document.getElementById('searchFeedBack').innerHTML='';
 		}else{
 			var array=JSON.parse(response);
 			var type=Object.prototype.toString.call(array)
 			if (type == "[object Array]"){
-				document.getElementById('searchResultCountDiv').innerHTML='<h2>Search products: '+array.length+' product(s)</h2>';
+				document.getElementById('searchResultCountDiv').innerHTML='Search products: '+array.length+' product(s)';
 				if(array.length===0){
 					hideSuggestionBox();
 				}else{
@@ -260,7 +263,7 @@ function findMatchIdCallBack(){
 				var id=xmlhttp.responseText;
 				hideSuggestionBox();
 				document.getElementById('searchResultDiv').innerHTML="";
-				document.getElementById('searchResultCountDiv').innerHTML='<h2>Search products: 0 product(s)</h2>';
+				document.getElementById('searchResultCountDiv').innerHTML='Search products: 0 product(s)';
 				document.getElementById('searchFeedBack').innerHTML='Product '+id+' could not be found';
 			}
 		}
@@ -289,14 +292,14 @@ function findProductCallBack(){
 		var response=xmlhttp.responseText;
 		if(isEmpty(response) || isBlank(response)){
 			document.getElementById('searchResultDiv').innerHTML="";
-			document.getElementById('searchResultCountDiv').innerHTML='<h2>Search products: 0 product(s)</h2>';
+			document.getElementById('searchResultCountDiv').innerHTML='Search products: 0 product(s)';
 			document.getElementById('searchFeedBack').innerHTML='';
 		}else{
 			var array=JSON.parse(response);
 			var type=Object.prototype.toString.call(array)
 			if (type == "[object Array]" && array.length > 0){
 				document.getElementById('searchResultDiv').innerHTML=retrieveProductList(array);
-				document.getElementById('searchResultCountDiv').innerHTML='<h2>Search products: '+array.length+' product(s)</h2>';
+				document.getElementById('searchResultCountDiv').innerHTML='Search products: '+array.length+' product(s)';
 				
 				if(array.length===1){
 					toggleProductDetail(array[0].id);
@@ -306,7 +309,7 @@ function findProductCallBack(){
 			}else{
 				var id=xmlhttp.responseText;
 				document.getElementById('searchResultDiv').innerHTML="";
-				document.getElementById('searchResultCountDiv').innerHTML='<h2>Search products: 0 product(s)</h2>';
+				document.getElementById('searchResultCountDiv').innerHTML='Search products: 0 product(s)';
 				document.getElementById('searchFeedBack').innerHTML='Product '+id+' could not be found';
 			}
 		}

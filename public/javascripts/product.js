@@ -23,8 +23,17 @@ function showCreateNew(){
 	html+='<tr><td>Title</td><td><input id="newProductTitle" type="text" value="" name="Title" onKeyUp="enterProductTitle()" /></td><td><div id="newProductTitleFeedBack"></td></tr>';
 	html+='<tr><td>Price</td><td><input id="newProductPrice" type="text" value="" name="Pricing.Price-" onKeyUp="enterProductPrice(true)" /></td><td><div id="newProductPriceFeedBack"></td></tr>';
 	html+='<tr><td>Cost</td><td><input id="newProductCost" type="text" value="" name="Pricing.Cost-" onKeyUp="enterProductCost(true)" /></td><td><div id="newProductCostFeedBack"></td></tr>';
+	html+='<input type="submit" style="visibility:hidden; position:absolute; left:-1000; top:-1000"/ >';
 	html+='</table>';
 	document.getElementById('createNewDiv').innerHTML=html;
+	document.getElementById("newProductId").focus();
+}
+
+function resetCreateNewForm(){
+	document.getElementById('newProductId').value='';
+	document.getElementById('newProductTitle').value='';
+	document.getElementById('newProductPrice').value='';
+	document.getElementById('newProductCost').value='';
 	document.getElementById("newProductId").focus();
 }
 
@@ -33,6 +42,7 @@ function hideCreateNew(){
 	html+='<tr><td width="70">Id</td><td><input id="newProductId" type="text" value="" name="Id" onFocus="showCreateNew()" /></td></tr>';
 	html+='</table>';
 	document.getElementById('createNewDiv').innerHTML=html;
+	document.getElementById('createNewFeedback').innerHTML='<p/>';
 }
 
 function validateProductId(){
@@ -41,21 +51,13 @@ function validateProductId(){
 		document.getElementById('newProductIdFeedBack').innerHTML='';
 		return true;
 	}else{
-		document.getElementById('newProductIdFeedBack').innerHTML='<font color="red">Id invalid</font>';
+		document.getElementById('newProductIdFeedBack').innerHTML='<font color="red" size="2">Id invalid</font>';
 		return false;
 	}
 }
 
 function enterProductId(){
-	var elem=document.getElementById('newProductId');
-	elem.onkeyup=function(e){
-		var code=e.keyCode;
-		if(code===13){
-			createNewProduct();
-		}else{
-			validateProductId();
-		}
-	}
+	validateProductId();
 }
 
 function validateProductTitle(){
@@ -64,21 +66,13 @@ function validateProductTitle(){
 		document.getElementById('newProductTitleFeedBack').innerHTML='';
 		return true;
 	}else{
-		document.getElementById('newProductTitleFeedBack').innerHTML='<font color="red">Title invalid</font>';
+		document.getElementById('newProductTitleFeedBack').innerHTML='<font color="red" size="2">Title invalid</font>';
 		return false;
 	}
 }
 
 function enterProductTitle(){
-	var elem=document.getElementById('newProductTitle');
-	elem.onkeyup=function(e){
-		var code=e.keyCode;
-		if(code===13){
-			createNewProduct();
-		}else{
-			validateProductTitle();
-		}
-	}
+	validateProductTitle();
 }
 
 function validateProductPrice(firstCall){
@@ -99,21 +93,13 @@ function validateProductPrice(firstCall){
 			return true;
 		}
 	}else{
-		document.getElementById('newProductPriceFeedBack').innerHTML='<font color="red">Price invalid</font>';
+		document.getElementById('newProductPriceFeedBack').innerHTML='<font color="red" size="2">Price invalid</font>';
 		return false;
 	}
 }
 
 function enterProductPrice(firstCall){
-	var elem=document.getElementById('newProductPrice');
-	elem.onkeyup=function(e){
-		var code=e.keyCode;
-		if(code===13){
-			createNewProduct();
-		}else{
-			validateProductCost(firstCall);
-		}
-	}
+	validateProductCost(firstCall);
 }
 
 function validateProductCost(firstCall){
@@ -128,21 +114,13 @@ function validateProductCost(firstCall){
 			return true;	
 		}
 	}else{
-		document.getElementById('newProductCostFeedBack').innerHTML='<font color="red">Cost invalid</font>';
+		document.getElementById('newProductCostFeedBack').innerHTML='<font color="red" size="2">Cost invalid</font>';
 		return false;
 	}
 }
 
 function enterProductCost(firstCall){
-	var elem=document.getElementById('newProductCost');
-	elem.onkeyup=function(e){
-		var code=e.keyCode;
-		if(code===13){
-			createNewProduct();
-		}else{
-			validateProductCost(firstCall);
-		}
-	}
+	validateProductCost(firstCall);
 }
 
 function validateNewPriceCost(){
@@ -152,7 +130,7 @@ function validateNewPriceCost(){
 		document.getElementById('newProductPriceFeedBack').innerHTML='';
 		return true;
 	}else{
-		document.getElementById('newProductPriceFeedBack').innerHTML='<font color="red">Price invalid</font>';
+		document.getElementById('newProductPriceFeedBack').innerHTML='<font color="red" size="2">Price invalid</font>';
 		return false;
 	}
 }

@@ -40,8 +40,8 @@ public class Application extends Controller {
 				.render(Product.all(), createForm, searchForm));
 	}
 
-	public static Result findAllProduct() {
-		System.out.println("findAllProduct::start.");
+	public static Result searchAllProduct() {
+		System.out.println("searchAllProduct::start.");
 		int count = Integer.parseInt(Config.getValue("resultLength"));
 		List<Product> list = Product.all(count);
 		if (list.size() > 0) {
@@ -54,11 +54,11 @@ public class Application extends Controller {
 		}
 	}
 
-	public static Result findProduct(String idStr) {
-		System.out.println("findProduct(String)::start.");
+	public static Result searchProduct(String idStr) {
+		System.out.println("searchProduct(String)::start.");
 		int id = Integer.parseInt(idStr);
 		int count = Integer.parseInt(Config.getValue("resultLength"));
-		List<Product> list = Product.find(id, count);
+		List<Product> list = Product.search(id, count);
 		if (list.size() > 0) {
 			String json = Util.SerializeToJson(list, Product.getEmptyJson());
 			System.out.println(json);
@@ -69,11 +69,11 @@ public class Application extends Controller {
 		}
 	}
 
-	public static Result findProductId(String idStr) {
-		System.out.println("findProduct(String)::start.");
+	public static Result findProduct(String idStr) {
+		System.out.println("searchProductId(String)::start.");
 		int id = Integer.parseInt(idStr);
 		int count = Integer.parseInt(Config.getValue("resultLength"));
-		List<Product> list = Product.findId(id, count);
+		List<Product> list = Product.find(id, count);
 		if (list.size() > 0) {
 			String json = Util.SerializeToJson(list, Product.getEmptyJson());
 			System.out.println(json);

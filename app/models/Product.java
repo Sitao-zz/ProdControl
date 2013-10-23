@@ -59,7 +59,7 @@ public class Product extends ObjectResultBase implements IProduct {
 		return list;
 	}
 
-	public static List<Product> find(int id) {
+	public static List<Product> search(int id) {
 		// query for String type
 		// BasicDBObject query = new BasicDBObject("id", new BasicDBObject(
 		// "$regex", "^9.*"));
@@ -78,7 +78,7 @@ public class Product extends ObjectResultBase implements IProduct {
 		return list;
 	}
 
-	public static List<Product> find(int id, int count) {
+	public static List<Product> search(int id, int count) {
 		BasicDBObject query = new BasicDBObject("$where",
 				"function(){return (this.id).toString().indexOf(\"" + id
 						+ "\") == 0;}");
@@ -94,7 +94,7 @@ public class Product extends ObjectResultBase implements IProduct {
 		return list;
 	}
 
-	public static List<Product> findId(int id) {
+	public static List<Product> find(int id) {
 		BasicDBObject query = new BasicDBObject("id", id);
 		BasicDBObject orderBy = new BasicDBObject("title", 1);
 		List<Product> list = new ArrayList<Product>();
@@ -108,7 +108,7 @@ public class Product extends ObjectResultBase implements IProduct {
 		return list;
 	}
 
-	public static List<Product> findId(int id, int count) {
+	public static List<Product> find(int id, int count) {
 		BasicDBObject query = new BasicDBObject("id", id);
 		BasicDBObject orderBy = new BasicDBObject("title", 1);
 		List<Product> list = new ArrayList<Product>();

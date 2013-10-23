@@ -11,7 +11,7 @@ function deleteProduct(id){
 
 function deleteProductCallBack(){
 	if (xmlhttp.readyState==4 && xmlhttp.status==200){
-		findProduct();
+		searchProduct();
 	}
 }
 
@@ -146,13 +146,13 @@ function clearSearchResult(){
 
 function startSearch(){
 	hideCreateNew();
-	//findMatchId();
+	//searchMatchId();
 }
 
 function selectSuggestion(id){
 	var elem=document.getElementById('productSearchText');
 	elem.value=id;
-	findProduct();
+	searchProduct();
 }
 
 function searchforProduct(){
@@ -163,7 +163,7 @@ function searchforProduct(){
 			// enter key
 			searchProdIdOrig=document.getElementById('productSearchText').value;
 			hideSuggestionBox();
-			findProduct();
+			searchProduct();
 		}else if(code===38){
 			// up key
 			if(document.getElementById('searchSuggestionTable').style.display!="none"){
@@ -175,7 +175,7 @@ function searchforProduct(){
 				setSelectedProdId(selectedSugPost);
 			}else{
 				searchProdIdOrig=document.getElementById('productSearchText').value;
-				findMatchId();
+				searchMatchId();
 			}
 		}else if(code===40){
 			// down key
@@ -188,7 +188,7 @@ function searchforProduct(){
 				setSelectedProdId(selectedSugPost);
 			}else{
 				searchProdIdOrig=document.getElementById('productSearchText').value;
-				findMatchId();
+				searchMatchId();
 			}
 		}else if(code===27){
 			// escape key
@@ -197,7 +197,7 @@ function searchforProduct(){
 		}
 		else{
 			searchProdIdOrig=document.getElementById('productSearchText').value;
-			findMatchId();
+			searchMatchId();
 		}
 	}
 }
@@ -222,8 +222,8 @@ function setSelectedProdId(post){
 	}
 }
 
-function findMatchId(){
-	initXmlHttp(findMatchIdCallBack);
+function searchMatchId(){
+	initXmlHttp(searchMatchIdCallBack);
 	var id=document.getElementById('productSearchText').value;
 	var result=isValidProductId(id,'searchFeedBack');
 	if(result>0){
@@ -240,7 +240,7 @@ function findMatchId(){
 	}
 }
 
-function findMatchIdCallBack(){
+function searchMatchIdCallBack(){
 	if (xmlhttp.readyState==4 && xmlhttp.status==200){
 		var response=xmlhttp.responseText;
 		if(isEmpty(response) || isBlank(response)){
@@ -270,8 +270,8 @@ function findMatchIdCallBack(){
 	}
 }
 
-function findProduct(){
-	initXmlHttp(findProductCallBack);
+function searchProduct(){
+	initXmlHttp(searchProductCallBack);
 	var id=document.getElementById('productSearchText').value;
 	var result=isValidProductId(id,'searchFeedBack');
 	if(result>0){
@@ -287,7 +287,7 @@ function findProduct(){
 	}
 }
 
-function findProductCallBack(){
+function searchProductCallBack(){
 	if (xmlhttp.readyState==4 && xmlhttp.status==200){
 		var response=xmlhttp.responseText;
 		if(isEmpty(response) || isBlank(response)){

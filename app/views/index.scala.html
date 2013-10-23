@@ -4,6 +4,7 @@
 
 @main("Product Control") {
 	<head>
+		<script type='text/javascript' src='assets/javascripts/jquery-1.9.0.min.js'></script>
 		<script type='text/javascript' src='assets/javascripts/common.js'></script>
 		<script type='text/javascript' src='assets/javascripts/color.js'></script>
 		<script type='text/javascript' src='assets/javascripts/product.js'></script>
@@ -14,19 +15,14 @@
 	<body onload="load()">
 	<h2>Add a new product</h2>
 	
-	@form(routes.Application.newProduct()){
-		@if(productForm.hasGlobalErrors) { 
-			<p class="error">
-				@productForm.globalError.message
-			</p>
-		}
-	
-		<div id="createNewDiv">
-		<table>
-		<tr><td width="70">Id</td><td><input id="newProductId" type="text" value="" name="Id" onFocus="showCreateNew()" /></td></tr>
-		</table>
-		</div>
-	}
+	<form id="createNewForm">
+	<div id="createNewFeedback"></div>
+	<div id="createNewDiv">
+	<table>
+	<tr><td width="70">Id</td><td><input id="newProductId" type="text" value="" name="Id" onFocus="showCreateNew()" /></td></tr>
+	</table>
+	</div>
+	</form>
 	
 	<div id="searchResultCountDiv"><h2>Search products: </h2></div>
 	<div>

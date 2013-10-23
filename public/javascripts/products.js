@@ -4,7 +4,7 @@ var suggestionList;
 
 function deleteProduct(id){
 	initXmlHttp(deleteProductCallBack);
-	var request="/products/"+id+"/delete";
+	var request="/products/delete/"+id;
 	xmlhttp.open("GET",request,true);
 	xmlhttp.send();
 }
@@ -104,6 +104,35 @@ function updateProductPriceCallBack(){
 	}
 }
 
+function createNewProduct(){
+	var form=document.getElementById('createNewForm');
+	if(validateNewProduct()){
+		var product=retrieveProductObj(form);
+		var data=JSON.stringify(product);
+		initXmlHttp(createNewProductCallBack);
+		var request="/products/create/"+data;
+		xmlhttp.open("POST",request,true);
+		xmlhttp.send();
+	}
+}
+
+function createNewProductCallBack(){
+	if (xmlhttp.readyState==4 && xmlhttp.status==200){
+		if(!isEmpty(xmlhttp.responseText) && !isBlank(xmlhttp.responseText)){
+			var result=JSON.parse(xmlhttp.responseText);
+			var id=result.id;
+			var msg=result.message;
+			var origValue=result.origValue;
+			if(isEmpty(result.message) || isBlank(result.message)){
+				document.getElementById('newProductIdFeedBack').innerHTML='<font color="green">Product '+id+' is created</font>';
+				document.getElementById("newProductId").focus();
+			}else{
+				document.getElementById('newProductIdFeedBack').innerHTML='<font color="red">'+msg+'</font>';
+			}
+		}
+	}
+}
+
 function clearSearchResult(){
 	hideSuggestionBox();
 	var id=document.getElementById('productSearchText').value;
@@ -195,7 +224,7 @@ function findMatchId(){
 	var id=document.getElementById('productSearchText').value;
 	var result=isValidProductId(id,'searchFeedBack');
 	if(result>0){
-		var request="/products/"+id+"/search";
+		var request="/products/search/"+id;
 		xmlhttp.open("POST",request,true);
 		xmlhttp.send();
 	}else if(result==0){
@@ -210,23 +239,30 @@ function findMatchId(){
 
 function findMatchIdCallBack(){
 	if (xmlhttp.readyState==4 && xmlhttp.status==200){
-		var array=JSON.parse(xmlhttp.responseText);
-		var type=Object.prototype.toString.call(array)
-		if (type == "[object Array]"){
-			document.getElementById('searchResultCountDiv').innerHTML='<h2>Search products: '+array.length+' product(s)</h2>';
-			if(array.length===0){
-				hideSuggestionBox();
-			}else{
-				document.getElementById('searchSuggestionTable').innerHTML=retrieveProductIdList(array);
-				initSuggestionBox();
-				suggestionList=array;
-			}
-		}else{
-			var id=xmlhttp.responseText;
-			hideSuggestionBox();
+		var response=xmlhttp.responseText;
+		if(isEmpty(response) || isBlank(response)){
 			document.getElementById('searchResultDiv').innerHTML="";
 			document.getElementById('searchResultCountDiv').innerHTML='<h2>Search products: 0 product(s)</h2>';
-			document.getElementById('searchFeedBack').innerHTML='Product '+id+' could not be found';
+			document.getElementById('searchFeedBack').innerHTML='';
+		}else{
+			var array=JSON.parse(response);
+			var type=Object.prototype.toString.call(array)
+			if (type == "[object Array]"){
+				document.getElementById('searchResultCountDiv').innerHTML='<h2>Search products: '+array.length+' product(s)</h2>';
+				if(array.length===0){
+					hideSuggestionBox();
+				}else{
+					document.getElementById('searchSuggestionTable').innerHTML=retrieveProductIdList(array);
+					initSuggestionBox();
+					suggestionList=array;
+				}
+			}else{
+				var id=xmlhttp.responseText;
+				hideSuggestionBox();
+				document.getElementById('searchResultDiv').innerHTML="";
+				document.getElementById('searchResultCountDiv').innerHTML='<h2>Search products: 0 product(s)</h2>';
+				document.getElementById('searchFeedBack').innerHTML='Product '+id+' could not be found';
+			}
 		}
 	}
 }
@@ -236,7 +272,7 @@ function findProduct(){
 	var id=document.getElementById('productSearchText').value;
 	var result=isValidProductId(id,'searchFeedBack');
 	if(result>0){
-		var request="/products/"+id+"/search";
+		var request="/products/search/"+id;
 		xmlhttp.open("POST",request,true);
 		xmlhttp.send();
 	}else if(result==0){
@@ -250,22 +286,29 @@ function findProduct(){
 
 function findProductCallBack(){
 	if (xmlhttp.readyState==4 && xmlhttp.status==200){
-		var array=JSON.parse(xmlhttp.responseText);
-		var type=Object.prototype.toString.call(array)
-		if (type == "[object Array]" && array.length > 0){
-			document.getElementById('searchResultDiv').innerHTML=retrieveProductList(array);
-			document.getElementById('searchResultCountDiv').innerHTML='<h2>Search products: '+array.length+' product(s)</h2>';
-			
-			if(array.length===1){
-				toggleProductDetail(array[0].id);
-			}else{
-				document.getElementById('productSearchText').blur();
-			}
-		}else{
-			var id=xmlhttp.responseText;
+		var response=xmlhttp.responseText;
+		if(isEmpty(response) || isBlank(response)){
 			document.getElementById('searchResultDiv').innerHTML="";
 			document.getElementById('searchResultCountDiv').innerHTML='<h2>Search products: 0 product(s)</h2>';
-			document.getElementById('searchFeedBack').innerHTML='Product '+id+' could not be found';
+			document.getElementById('searchFeedBack').innerHTML='';
+		}else{
+			var array=JSON.parse(response);
+			var type=Object.prototype.toString.call(array)
+			if (type == "[object Array]" && array.length > 0){
+				document.getElementById('searchResultDiv').innerHTML=retrieveProductList(array);
+				document.getElementById('searchResultCountDiv').innerHTML='<h2>Search products: '+array.length+' product(s)</h2>';
+				
+				if(array.length===1){
+					toggleProductDetail(array[0].id);
+				}else{
+					document.getElementById('productSearchText').blur();
+				}
+			}else{
+				var id=xmlhttp.responseText;
+				document.getElementById('searchResultDiv').innerHTML="";
+				document.getElementById('searchResultCountDiv').innerHTML='<h2>Search products: 0 product(s)</h2>';
+				document.getElementById('searchFeedBack').innerHTML='Product '+id+' could not be found';
+			}
 		}
 	}
 }
@@ -285,7 +328,7 @@ function hideProductDetail(id){
 
 function showProductDetail(id){
 	initXmlHttp(showProductDetailCallBack);
-	var request="/products/"+id+"/search";
+	var request="/products/search/"+id;
 	xmlhttp.open("POST",request,true);
 	xmlhttp.send();
 }

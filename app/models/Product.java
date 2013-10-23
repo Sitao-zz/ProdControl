@@ -106,7 +106,7 @@ public class Product extends ObjectResultBase implements IProduct {
 				mongo.coll.save(product);
 			} else {
 				return new ObjectResult(ObjectResultBase.CODE.WARN,
-						"Price invalid", product.pricing.price + "");
+						"Price invalid", Double.toString(product.pricing.price));
 			}
 		}
 		return ObjectResult.OK;

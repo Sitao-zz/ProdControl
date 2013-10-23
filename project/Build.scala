@@ -12,7 +12,8 @@ object ApplicationBuild extends Build {
     javaCore,
     javaJdbc,
     javaEbean,
-    "net.vz.mongodb.jackson" %% "play-mongo-jackson-mapper" % "1.1.0"
+    "net.vz.mongodb.jackson" %% "play-mongo-jackson-mapper" % "1.1.0",
+    "org.json"%"org.json"%"chargebee-1.0"
   )
 
   val main = play.Project(appName, appVersion, appDependencies).settings(

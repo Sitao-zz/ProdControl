@@ -19,11 +19,10 @@ function isValidProductId(id, feedbackDivId){
 
 function showCreateNew(){
 	var html='<table>';
-	html+='<tr><td width="70">Id</td><td><input id="newProductId" type="text" value="" name="Id" onKeyUp="validateProductId()" /></td><td><div id="newProductIdFeedBack"></td></tr>';
-	html+='<tr><td>Title</td><td><input id="newProductTitle" type="text" value="" name="Title" onKeyUp="validateProductTitle()" /></td><td><div id="newProductTitleFeedBack"></td></tr>';
-	html+='<tr><td>Price</td><td><input id="newProductPrice" type="text" value="" name="Pricing.Price" onKeyUp="validateProductPrice(true)" /></td><td><div id="newProductPriceFeedBack"></td></tr>';
-	html+='<tr><td>Cost</td><td><input id="newProductCost" type="text" value="" name="Pricing.Cost" onKeyUp="validateProductCost(true)" /></td><td><div id="newProductCostFeedBack"></td></tr>';
-	html+='<tr><td><input type="submit" value="Create" /></td></tr>';
+	html+='<tr><td width="70">Id</td><td><input id="newProductId" type="text" value="" name="Id-" onKeyUp="enterProductId()" /></td><td><div id="newProductIdFeedBack"></td></tr>';
+	html+='<tr><td>Title</td><td><input id="newProductTitle" type="text" value="" name="Title" onKeyUp="enterProductTitle()" /></td><td><div id="newProductTitleFeedBack"></td></tr>';
+	html+='<tr><td>Price</td><td><input id="newProductPrice" type="text" value="" name="Pricing.Price-" onKeyUp="enterProductPrice(true)" /></td><td><div id="newProductPriceFeedBack"></td></tr>';
+	html+='<tr><td>Cost</td><td><input id="newProductCost" type="text" value="" name="Pricing.Cost-" onKeyUp="enterProductCost(true)" /></td><td><div id="newProductCostFeedBack"></td></tr>';
 	html+='</table>';
 	document.getElementById('createNewDiv').innerHTML=html;
 	document.getElementById("newProductId").focus();
@@ -47,6 +46,18 @@ function validateProductId(){
 	}
 }
 
+function enterProductId(){
+	var elem=document.getElementById('newProductId');
+	elem.onkeyup=function(e){
+		var code=e.keyCode;
+		if(code===13){
+			createNewProduct();
+		}else{
+			validateProductId();
+		}
+	}
+}
+
 function validateProductTitle(){
 	var id=document.getElementById('newProductTitle').value;
 	if(isValidTitle(id)){
@@ -55,6 +66,18 @@ function validateProductTitle(){
 	}else{
 		document.getElementById('newProductTitleFeedBack').innerHTML='<font color="red">Title invalid</font>';
 		return false;
+	}
+}
+
+function enterProductTitle(){
+	var elem=document.getElementById('newProductTitle');
+	elem.onkeyup=function(e){
+		var code=e.keyCode;
+		if(code===13){
+			createNewProduct();
+		}else{
+			validateProductTitle();
+		}
 	}
 }
 
@@ -81,6 +104,18 @@ function validateProductPrice(firstCall){
 	}
 }
 
+function enterProductPrice(firstCall){
+	var elem=document.getElementById('newProductPrice');
+	elem.onkeyup=function(e){
+		var code=e.keyCode;
+		if(code===13){
+			createNewProduct();
+		}else{
+			validateProductCost(firstCall);
+		}
+	}
+}
+
 function validateProductCost(firstCall){
 	var id=document.getElementById('newProductCost').value;
 	if(isNumber(id)){
@@ -98,6 +133,18 @@ function validateProductCost(firstCall){
 	}
 }
 
+function enterProductCost(firstCall){
+	var elem=document.getElementById('newProductCost');
+	elem.onkeyup=function(e){
+		var code=e.keyCode;
+		if(code===13){
+			createNewProduct();
+		}else{
+			validateProductCost(firstCall);
+		}
+	}
+}
+
 function validateNewPriceCost(){
 	var price=parseFloat(document.getElementById('newProductPrice').value);
 	var cost=parseFloat(document.getElementById('newProductCost').value);
@@ -108,6 +155,46 @@ function validateNewPriceCost(){
 		document.getElementById('newProductPriceFeedBack').innerHTML='<font color="red">Price invalid</font>';
 		return false;
 	}
+}
+
+function validateNewProduct(){
+	if(!validateProductId()){
+		return false;
+	}
+	
+	if(!validateProductTitle()){
+		return false;
+	}
+	
+	if(!validateProductPrice(true)){
+		return false;
+	}
+	
+	if(!validateProductCost(true)){
+		return false;
+	}
+	
+	return true;
+}
+
+function retrieveProductObj(form){
+	var product={};
+	for(var i=0, j=form.length; i<j; i++){
+		var input=form[i];
+		var patt=/[\w]+/ig;
+		if(input.name){
+			var inputName=input.name;
+			var inputValue=input.value;
+			var fullName=inputName.match(patt);
+			if(/-/.test(inputName)){
+				inputValue=parseFloat(inputValue);
+			}
+			
+			product=insertObj(product, -1, fullName, inputValue);
+		}
+	}
+	
+	return product;
 }
 
 function highlightProduct(id){

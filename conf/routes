@@ -12,12 +12,12 @@ GET     /products/assets/*file               controllers.Assets.at(path="/public
 # Products
 GET 	/products					controllers.Application.products()
 POST 	/products/search			controllers.Application.findAllProduct()
-POST	/products/:id/search		controllers.Application.findProduct(id: String)
-POST	/products/create			controllers.Application.newProduct()
+POST	/products/search/:id		controllers.Application.findProduct(id: String)
+POST	/products/create/:product	controllers.Application.newProduct(product: String)
 PUT		/products/update			controllers.Application.updateProduct()
 POST	/products/update/:id/title/:title						controllers.Application.updateProductTitle(id: String, title: String)
 POST	/products/update/:id/price/:price						controllers.Application.updateProductPrice(id: String, price: String)
-GET		/products/:id/delete		controllers.Application.deleteProduct(id: String)
+GET		/products/delete/:id		controllers.Application.deleteProduct(id: String)
 
 # Testing method
 GET		/products/date				controllers.Application.getDate()

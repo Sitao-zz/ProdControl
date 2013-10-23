@@ -13,6 +13,8 @@ import models.Search;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import play.data.Form;
 import play.mvc.Controller;
@@ -39,7 +41,7 @@ public class Application extends Controller {
 	}
 
 	public static Result findAllProduct() {
-		System.out.println("findProduct::start.");
+		System.out.println("findAllProduct::start.");
 		int count = Integer.parseInt(Config.getValue("resultLength"));
 		List<Product> list = Product.all(count);
 		if (list.size() > 0) {
@@ -47,6 +49,7 @@ public class Application extends Controller {
 			System.out.println(json);
 			return ok(json);
 		} else {
+			System.out.println("empty product list");
 			return ok("");
 		}
 	}
@@ -61,29 +64,33 @@ public class Application extends Controller {
 			System.out.println(json);
 			return ok(json);
 		} else {
+			System.out.println("empty product list");
 			return ok(idStr);
 		}
 	}
 
-	public static Result newProduct() {
+	public static Result newProduct(String jsonData) {
 		System.out.println("newProduct::start");
-		ProductFormController objForm = new ProductFormController(Product.class);
-		ObjectResultBase result = objForm.retrieveObject(createForm);
-		if (result.equals(ObjectResult.ERROR)) {
-			return badRequest(views.html.index.render(Product.all(),
-					objForm.getForm(), searchForm));
+		Product product = new Product();
+		RequestResult res;
+		JSONObject productObj;
+		try {
+			productObj = new JSONObject(jsonData);
+			product.id = productObj.getInt("Id");
+			product.title = productObj.getString("Title");
+			JSONObject priceObj = productObj.getJSONObject("Pricing");
+			product.pricing.price = priceObj.getDouble("Price");
+			product.pricing.cost = priceObj.getDouble("Cost");
+			res = new RequestResult(product.id);
+		} catch (JSONException e) {
+			e.printStackTrace();
+			System.out.println("newProduct::jsonData=" + jsonData);
+			res = new RequestResult(product.id,
+					"Create new product is not successful", "");
 		}
-		if (result.code().equals(ObjectResult.CODE.WARN)) {
-			JOptionPane.showMessageDialog(null, result.message(), "Warning",
-					JOptionPane.INFORMATION_MESSAGE);
-			return badRequest(result.message());
-		}
-		if (!(result instanceof Product)) {
-			return badRequest("Invalid product instance");
-		}
-		Product product = (Product) result;
 		Product.create(product);
-		return redirect(routes.Application.products());
+		String json = Util.SerializeToJson(res, "");
+		return ok(json);
 	}
 
 	public static Result updateProduct() {

@@ -15,7 +15,7 @@ function getGreyColor(){
 }
 
 function getHightlightColor(){
-	return "#77FFD4";
+	return "#ffedee";
 }
 
 function getDownplayColor(){

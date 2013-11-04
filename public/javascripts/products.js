@@ -144,9 +144,14 @@ function clearSearchResult(){
 	}
 }
 
+function startCreateNew(){
+	hideSearchProducts();
+	showCreateNew();
+}
+
 function startSearch(){
 	hideCreateNew();
-	//searchMatchId();
+	showSearchProducts();
 }
 
 function selectSuggestion(id){

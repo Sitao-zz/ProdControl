@@ -73,7 +73,7 @@ function insertObj(parent, parentIndex, paramList, value){
 }
 
 function load(){
-	//document.getElementById("newProductId").focus();
+	startCreateNew();
 }
 
 function initSuggestionBox(){
@@ -82,7 +82,7 @@ function initSuggestionBox(){
 	var left=searchElem.getBoundingClientRect().left;
 	var top=searchElem.getBoundingClientRect().top;
 	suggestionElem.style.left=left+'px';
-	suggestionElem.style.top=top+25+'px';
+	suggestionElem.style.top=top+20+'px';
 	suggestionElem.style.display='inline';
 	suggestionElem.style.backgroundColor=getWhiteColor();
 	selectedSugPost=0;

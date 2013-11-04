@@ -184,10 +184,10 @@ function highlightProduct(id){
 }
 
 function downplayProduct(id){
-	document.getElementById('productTable_'+id).style.backgroundColor=getDownplayColor();
+	document.getElementById('productTable_'+id).style.backgroundColor="";
 	var sub=document.getElementById('productDetailTable_'+id);
 	if(sub!=null){
-		sub.style.backgroundColor=getDownplayColor();
+		sub.style.backgroundColor="";
 	}
 }
 
